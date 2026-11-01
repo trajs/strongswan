@@ -1,0 +1,17 @@
+charon.plugins.kernel-ovs.poll_interval = 5
+	Interval, in seconds, to check SA lifetimes and ovs-vswitchd restarts.
+
+	Interval, in seconds, to check the byte and packet based lifetimes of the
+	SAs, and whether ovs-vswitchd restarted.
+
+charon.plugins.kernel-ovs.rundir = /var/run/openvswitch
+	Run directory of ovs-vswitchd.
+
+	Run directory of ovs-vswitchd, where it writes its pidfile and control
+	socket.
+
+charon.plugins.kernel-ovs.socket =
+	Path of the control socket of ovs-vswitchd.
+
+	Path of the control socket of ovs-vswitchd, instead of finding it through
+	the pidfile in _rundir_.

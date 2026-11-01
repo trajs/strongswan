@@ -587,6 +587,13 @@ if MONOLITHIC
 endif
 endif
 
+if USE_KERNEL_OVS
+  SUBDIRS += plugins/kernel_ovs
+if MONOLITHIC
+  libcharon_la_LIBADD += plugins/kernel_ovs/libstrongswan-kernel-ovs.la
+endif
+endif
+
 if USE_KERNEL_WFP
   SUBDIRS += plugins/kernel_wfp
 if MONOLITHIC

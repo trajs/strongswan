@@ -73,6 +73,7 @@ plugins = \
 	plugins/led.opt \
 	plugins/kernel-libipsec.opt \
 	plugins/kernel-netlink.opt \
+	plugins/kernel-ovs.opt \
 	plugins/kernel-pfkey.opt \
 	plugins/kernel-pfroute.opt \
 	plugins/load-tester.opt \
