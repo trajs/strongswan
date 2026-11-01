@@ -102,6 +102,13 @@ by default.  If it is enforced, allow the plugin to reach `ovs-vswitchd` in
 - **ovs-vswitchd restarts**: the plugin notices within `poll_interval`,
   reinstalls the SAs and has charon rekey them, as their sequence numbers
   restart.
+- **charon restarts**: charon keeps its SAs and keys only in memory, so nothing
+  is reinstalled: new IKE and CHILD SAs must be negotiated, with `start_action`
+  or `swanctl --initiate`.  A clean stop deletes the SAs in Open vSwitch, and
+  packets are dropped until the new ones are installed.  After a crash, the old
+  SAs keep forwarding traffic until charon starts again and the plugin removes
+  them, with `esp/sa-flush`, as nothing else would rekey, expire or delete them.
+  One charon must therefore own the IKE-keyed SAs of an ovs-vswitchd.
 - **Policies** are not installed: Open vSwitch forwards according to its
   OpenFlow tables.
 

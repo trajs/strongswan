@@ -701,6 +701,22 @@ METHOD(kernel_ipsec_t, destroy, void,
 	free(this);
 }
 
+/**
+ * Remove the SAs a previous charon left in Open vSwitch if it did not shut
+ * down cleanly.  This charon does not know them, so nothing would ever rekey,
+ * expire or delete them, and their keys would stay in ovs-vswitchd.
+ */
+static void flush_stale_sas(private_kernel_ovs_ipsec_t *this)
+{
+	char *reply;
+
+	if (this->ctl->call(this->ctl, &reply, "esp/sa-flush", NULL))
+	{
+		DBG1(DBG_KNL, "kernel-ovs: removed any SAs left by a previous charon");
+	}
+	free(reply);
+}
+
 /*
  * Described in header.
  */
@@ -740,6 +756,7 @@ kernel_ovs_ipsec_t *kernel_ovs_ipsec_create()
 		.refs = 1,
 		.ipsec = this,
 	);
+	flush_stale_sas(this);
 	lib->scheduler->schedule_job(lib->scheduler, (job_t*)
 					callback_job_create((callback_job_cb_t)poll_job,
 						ipsec_ref_get(this->ref),
