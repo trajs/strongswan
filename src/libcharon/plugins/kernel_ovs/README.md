@@ -117,9 +117,12 @@ by default.  If it is enforced, allow the plugin to reach `ovs-vswitchd` in
 - ESP in tunnel mode with AES-GCM (16-byte ICV) only.
 - `update_sa` is not supported, so MOBIKE address changes and NAT mapping
   changes are not followed.
-- With UDP encapsulation in Open vSwitch (`esp_udp_encap`), IKE packets on the
-  same port are dropped by the datapath, so IKE must not use port 4500 on that
-  address.
+- NAT traversal does not work, and Open vSwitch rejects `esp_udp_encap` with
+  `esp_keying=ike`.  Before that check, with `esp_udp_encap=true`, the datapath
+  dropped IKE on port 4500, which strongSwan moves to by default even without
+  NAT.  With it off, `encap = yes` makes adding the SA fail.  With another
+  `esp_udp_port`, IKE and the SAs succeeded, but no traffic passed and nothing
+  reported an error.
 - No usage time for SAs, so inactivity is detected from changes of the byte
   counters.
 
